@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/services/auth.dart';
+import 'package:ping_app/shared/constants.dart';
 
 class Settings extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -33,8 +34,8 @@ class Settings extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              // decoration:
-              //     textInputDecoration.copyWith(hintText: 'Type Message here'),
+              decoration:
+                  textInputDecoration.copyWith(hintText: 'Type Message here'),
               onChanged: (text) {
                 print('Message: $text');
               },
