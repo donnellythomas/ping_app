@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/screens/home/settings/panels/group_editor.dart';
 import 'package:ping_app/services/auth.dart';
 import 'package:ping_app/shared/constants.dart';
 
@@ -49,11 +50,7 @@ class Settings extends StatelessWidget {
                   'MY GROUPS',
                 ),
               )),
-          Container(
-            height: 150,
-            color: Colors.white,
-            margin: EdgeInsets.all(10),
-          ),
+          GroupEditor(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: RaisedButton.icon(

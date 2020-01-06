@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/screens/home/settings/settings.dart';
 import 'messages.dart';
 import 'home.dart';
-import 'settings.dart';
 
 class PrimaryView extends StatefulWidget {
   PrimaryView({Key key}) : super(key: key);

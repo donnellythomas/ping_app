@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ping_app/screens/authenticate/authenticate.dart';
 import 'package:ping_app/screens/wrapper.dart';
 import 'package:ping_app/services/auth.dart';
 import 'package:provider/provider.dart';
