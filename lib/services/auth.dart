@@ -21,8 +21,9 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
+      await DatabaseService(uid: user.uid).updateUserData('my message');
       await DatabaseService(uid: user.uid)
-          .updateUserData('Thomas', 'tsurfer21');
+          .updateGroupData('groupname', user.uid);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
