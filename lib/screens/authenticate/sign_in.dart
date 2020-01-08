@@ -100,7 +100,7 @@ class _SignInState extends State<SignIn> {
                                 loading = true;
                               });
                               dynamic result = await _auth
-                                  .singInWithEmailAndPassword(email, password);
+                                  .signInWithEmailAndPassword(email, password);
                               if (result == null) {
                                 setState(() {
                                   error =

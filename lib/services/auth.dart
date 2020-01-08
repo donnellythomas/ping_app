@@ -21,9 +21,8 @@ class AuthService {
     try {
       AuthResult result = await _auth.signInAnonymously();
       FirebaseUser user = result.user;
-      await DatabaseService(uid: user.uid).updateUserData('my message');
-      await DatabaseService(uid: user.uid)
-          .updateGroupData('groupname', user.uid);
+      await DatabaseService(uid: user.uid).setUserData('my message');
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -32,7 +31,7 @@ class AuthService {
   }
 
   // sign in with email/password
-  Future singInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
