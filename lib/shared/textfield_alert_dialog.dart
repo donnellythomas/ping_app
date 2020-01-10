@@ -17,6 +17,7 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    // final groupList = Provider.of<List<Group>>(context);
 
     return StreamBuilder<UserData>(
         stream: null,
@@ -47,7 +48,7 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                   // print(_currentName);
                   if (_formKey.currentState.validate()) {
                     await DatabaseService(uid: user.uid)
-                        .setGoupData(_currentName ?? "idk", ['null', null]);
+                        .setGoupData(_currentName, []);
                     Navigator.pop(context);
                   }
                 },

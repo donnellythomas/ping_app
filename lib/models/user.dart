@@ -1,4 +1,4 @@
-import 'group.dart';
+import 'package:ping_app/screens/home/settings/cards/group_card.dart';
 
 class User {
   final String uid;
@@ -11,7 +11,7 @@ class User {
 class UserData {
   final String uid;
   final String message;
-  final List<Group> groups;
+  final List<GroupCard> groups;
 
   UserData({this.uid, this.message, this.groups});
 }

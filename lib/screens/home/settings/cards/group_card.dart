@@ -1,16 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ping_app/screens/home/settings/cards/person_card.dart';
+import 'package:ping_app/services/database.dart';
 
 class GroupCard extends StatelessWidget {
-  final String groupName;
-  final List<PersonCard> people;
-
-  GroupCard({this.groupName, this.people});
+  final String gid;
+  final String name;
+  final List<String> people;
+  GroupCard({
+    this.gid,
+    this.name,
+    this.people,
+  });
 
   @override
   Widget build(BuildContext context) {
-    int peopleCount = people == null ? 0 : people.length;
-
+    print(people);
     return Card(
       child: Column(
         children: <Widget>[
@@ -20,7 +25,7 @@ class GroupCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  groupName,
+                  name,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -40,10 +45,10 @@ class GroupCard extends StatelessWidget {
               height: 100,
               color: Colors.grey[300],
               child: ListView.builder(
-                itemCount: peopleCount,
+                itemCount: people == null ? 0 : people.length,
                 padding: EdgeInsets.all(0),
                 itemBuilder: (context, index) {
-                  return people[index];
+                  return PersonCard(name: people[index]);
                 },
               ))
         ],

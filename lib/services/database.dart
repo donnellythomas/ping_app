@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
+import 'package:ping_app/screens/home/settings/cards/group_card.dart';
+import 'package:ping_app/screens/home/settings/cards/person_card.dart';
 
 class DatabaseService {
   final String uid;
@@ -15,7 +16,6 @@ class DatabaseService {
   ) async {
     return await users.document(uid).setData({
       'message': message,
-      // 'groups': groups,
     });
   }
 
@@ -23,8 +23,8 @@ class DatabaseService {
     return await users
         .document(uid)
         .collection('groups')
-        .document(groupName)
-        .setData({'people': people});
+        .document()
+        .setData({'name': groupName, 'people': people});
   }
 
   Future updateMessage(String message) async {
@@ -33,13 +33,13 @@ class DatabaseService {
     });
   }
 
-  Future addGroup(String groupname, List<String> people) async {
-    return await users
-        .document(uid)
-        .collection('groups')
-        .document(groupname)
-        .updateData({'people': people});
-  }
+  // Future addGroup(String groupname, List<String> people) async {
+  //   return await users
+  //       .document(uid)
+  //       .collection('groups')
+  //       .document()
+  //       .updateData({'people': people});
+  // }
   // Future addGroup(String groupName) async {
   //   return await users
   //       .document(uid)
@@ -59,7 +59,7 @@ class DatabaseService {
     return UserData(
       uid: uid,
       message: snapshot.data['message'],
-      // groups: snapshot.data['groups'],
+      groups: snapshot.data['groups'],
     );
   }
 
@@ -69,4 +69,44 @@ class DatabaseService {
   Stream<UserData> get userData {
     return users.document(uid).snapshots().map(_userDataFromSnapshot);
   }
+
+  List<GroupCard> _groupListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return GroupCard(
+        gid: doc.documentID,
+        name: doc.data['name'] ?? 'default name',
+        people: List.from(doc['people']),
+      );
+    }).toList();
+  }
+
+  //get list of groups from firestore
+  Stream<List<GroupCard>> get groupList {
+    return users
+        .document(uid)
+        .collection('groups')
+        .snapshots()
+        .map(_groupListFromSnapshot);
+  }
+
+  Future removePerson(String name, String gid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .updateData({
+      'people': FieldValue.arrayRemove([name])
+    });
+  }
+
+  // Stream<List<String>> getPeople(String gid) {
+  //   return users
+  //       .document(uid)
+  //       .collection('groups')
+  //       .document(gid)
+  //       .snapshots()
+  //       .map((doc) {
+  //     return doc.data['people'];
+  //   });
+  // }
 }
