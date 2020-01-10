@@ -27,6 +27,7 @@ class PersonCard extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.not_interested),
               onPressed: () async {
+                print(gid);
                 await DatabaseService(uid: user.uid).removePerson(name, gid);
               })
         ],

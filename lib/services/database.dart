@@ -72,6 +72,7 @@ class DatabaseService {
 
   List<GroupCard> _groupListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
+      // print("document id " + doc.documentID);
       return GroupCard(
         gid: doc.documentID,
         name: doc.data['name'] ?? 'default name',
@@ -96,6 +97,16 @@ class DatabaseService {
         .document(gid)
         .updateData({
       'people': FieldValue.arrayRemove([name])
+    });
+  }
+
+  Future addPerson(String name, String gid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .updateData({
+      'people': FieldValue.arrayUnion([name])
     });
   }
 

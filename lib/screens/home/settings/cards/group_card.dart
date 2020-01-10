@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ping_app/screens/home/settings/cards/person_card.dart';
 import 'package:ping_app/services/database.dart';
+import 'package:ping_app/shared/textfield_alert_dialog_addPerson.dart';
 
 class GroupCard extends StatelessWidget {
   final String gid;
@@ -15,7 +16,20 @@ class GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(people);
+    void _showAlertDialog() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+              child: TextFieldAlertDialog(
+                gid: gid,
+              ),
+            );
+          });
+    }
+
+    // print("card ID " + gid);
     return Card(
       child: Column(
         children: <Widget>[
@@ -37,7 +51,9 @@ class GroupCard extends StatelessWidget {
                 label: Text(
                   'Add People',
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _showAlertDialog();
+                },
               )
             ],
           ),
@@ -48,7 +64,10 @@ class GroupCard extends StatelessWidget {
                 itemCount: people == null ? 0 : people.length,
                 padding: EdgeInsets.all(0),
                 itemBuilder: (context, index) {
-                  return PersonCard(name: people[index]);
+                  return PersonCard(
+                    name: people[index],
+                    gid: gid,
+                  );
                 },
               ))
         ],

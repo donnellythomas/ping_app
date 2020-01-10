@@ -4,7 +4,7 @@ import 'package:ping_app/screens/home/settings/cards/group_card.dart';
 import 'package:ping_app/screens/home/settings/cards/person_card.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/loading.dart';
-import 'package:ping_app/shared/textfield_alert_dialog.dart';
+import 'package:ping_app/shared/textfield_alert_dialog_addGroup.dart';
 import 'package:provider/provider.dart';
 
 class GroupEditor extends StatelessWidget {

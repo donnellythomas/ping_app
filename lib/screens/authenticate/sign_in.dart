@@ -130,7 +130,8 @@ class _SignInState extends State<SignIn> {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = _auth.signInAnon();
+                          dynamic result = _auth.signInWithEmailAndPassword(
+                              'dev@ping.com', 'password01');
                           if (result == null) {
                             print('an error has occured');
                           }
