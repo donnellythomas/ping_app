@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ping_app/models/user.dart';
 import 'package:ping_app/screens/home/settings/cards/group_card.dart';
@@ -9,22 +11,23 @@ class DatabaseService {
   static final Firestore db = Firestore.instance;
 
   final CollectionReference users = db.collection('users');
-
+  final CollectionReference emailToUid = db.collection('emailToUid');
   Future setUserData(
     String message,
+    String email,
     // List<Group> groups,
   ) async {
     return await users.document(uid).setData({
       'message': message,
+      'email': email,
+      'uid': uid,
     });
   }
 
-  Future setGoupData(String groupName, List<String> people) async {
-    return await users
-        .document(uid)
-        .collection('groups')
-        .document()
-        .setData({'name': groupName, 'people': people});
+  Future setGoupData(
+      String groupName, List<String> people, bool switchValue) async {
+    return await users.document(uid).collection('groups').document().setData(
+        {'name': groupName, 'people': people, 'switchValue': switchValue});
   }
 
   Future updateMessage(String message) async {
@@ -32,27 +35,6 @@ class DatabaseService {
       'message': message,
     });
   }
-
-  // Future addGroup(String groupname, List<String> people) async {
-  //   return await users
-  //       .document(uid)
-  //       .collection('groups')
-  //       .document()
-  //       .updateData({'people': people});
-  // }
-  // Future addGroup(String groupName) async {
-  //   return await users
-  //       .document(uid)
-  //       .updateData({'groups': UserData.groups
-  // }
-
-  // Future addGroup(String groupname) async {
-  //   return await users
-  //       .document(uid)
-  //       .collection('groups')
-  //       .document(groupname)
-  //       .updateData({'group': groupname});
-  // }
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -77,7 +59,14 @@ class DatabaseService {
         gid: doc.documentID,
         name: doc.data['name'] ?? 'default name',
         people: List.from(doc['people']),
+        switchValue: doc.data['switchValue'],
       );
+    }).toList();
+  }
+
+  List<String> _groupListStringFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return doc.data['name'].toString();
     }).toList();
   }
 
@@ -88,6 +77,15 @@ class DatabaseService {
         .collection('groups')
         .snapshots()
         .map(_groupListFromSnapshot);
+  }
+
+  //get list of groups from firestore
+  Stream<List<String>> get groupListString {
+    return users
+        .document(uid)
+        .collection('groups')
+        .snapshots()
+        .map(_groupListStringFromSnapshot);
   }
 
   Future removePerson(String name, String gid) async {
@@ -110,14 +108,25 @@ class DatabaseService {
     });
   }
 
-  // Stream<List<String>> getPeople(String gid) {
-  //   return users
-  //       .document(uid)
-  //       .collection('groups')
-  //       .document(gid)
-  //       .snapshots()
-  //       .map((doc) {
-  //     return doc.data['people'];
-  //   });
-  // }
+  Future switchToggle(bool switchValue, String gid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .updateData({'switchValue': switchValue});
+  }
+
+  Future addEmailToUid(String email) async {
+    return await emailToUid.document(email).setData({'uid': uid});
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    return await emailToUid.document(email).get().then((snap) {
+      if (snap.exists) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 }

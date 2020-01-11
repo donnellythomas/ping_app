@@ -47,7 +47,7 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                   // print(_currentName);
                   if (_formKey.currentState.validate()) {
                     await DatabaseService(uid: user.uid)
-                        .setGoupData(_currentName, []);
+                        .setGoupData(_currentName, [], false);
                     Navigator.pop(context);
                   }
                 },

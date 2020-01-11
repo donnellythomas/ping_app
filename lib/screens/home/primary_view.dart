@@ -39,6 +39,9 @@ class _PrimaryViewState extends State<PrimaryView> {
         StreamProvider<UserData>.value(
           value: DatabaseService(uid: user.uid).userData,
         ),
+        StreamProvider<List<String>>.value(
+          value: DatabaseService(uid: user.uid).groupListString,
+        ),
         StreamProvider<List<GroupCard>>.value(
             value: DatabaseService(uid: user.uid).groupList)
       ],

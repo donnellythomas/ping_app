@@ -32,7 +32,9 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                 controller: _textFieldController,
                 decoration:
                     textInputDecoration.copyWith(hintText: 'type name here'),
-                validator: (val) => val.isEmpty ? 'Please enter a name' : null,
+                validator: (val) {
+                  return val.isEmpty ? 'Please enter a name' : null;
+                },
                 onChanged: (val) => setState(() => _currentName = val),
               ),
             ),
@@ -47,10 +49,15 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                 child: new Text('CONFIRM'),
                 onPressed: () async {
                   // print(_currentName);
-                  if (_formKey.currentState.validate()) {
+                  if (await DatabaseService()
+                      .checkEmailExists(_currentName)
+                      .then((value) => value == true)) {
                     await DatabaseService(uid: user.uid)
                         .addPerson(_currentName, widget.gid);
+                    print('username exists');
                     Navigator.pop(context);
+                  } else {
+                    print('enter a valid email');
                   }
                 },
               )
@@ -59,3 +66,5 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
         });
   }
 }
+
+_checkEmailValid(String val) {}
