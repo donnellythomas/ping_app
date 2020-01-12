@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/user.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> groupList = Provider.of<List<String>>(context);
+    // final List<String> groupList = Provider.of<List<String>>(context);
+    final User user = Provider.of<User>(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -24,7 +26,7 @@ class Home extends StatelessWidget {
         ),
         RawMaterialButton(
           onPressed: () {
-            // print(grouplist.toString());
+            DatabaseService().createChats(user.uid);
           },
           child: Text(
             'SOS!',

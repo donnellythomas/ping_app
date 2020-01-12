@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/friend.dart';
 import 'package:ping_app/models/user.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/constants.dart';
 import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class TextFieldAlertDialog extends StatefulWidget {
   @override
@@ -25,13 +27,13 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
         builder: (context, snapshot) {
           return AlertDialog(
             backgroundColor: Colors.grey[200],
-            title: Text('Enter a friends name'),
+            title: Text('Enter a friends email'),
             content: Form(
               key: _formKey,
               child: TextFormField(
                 controller: _textFieldController,
                 decoration:
-                    textInputDecoration.copyWith(hintText: 'type name here'),
+                    textInputDecoration.copyWith(hintText: 'type email here'),
                 validator: (val) {
                   return val.isEmpty ? 'Please enter a name' : null;
                 },
@@ -52,9 +54,14 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                   if (await DatabaseService()
                       .checkEmailExists(_currentName)
                       .then((value) => value == true)) {
-                    await DatabaseService(uid: user.uid)
-                        .addPerson(_currentName, widget.gid);
-                    print('username exists');
+                    String friendUid =
+                        await DatabaseService().getUidFromEmail(_currentName);
+                    Friend friend =
+                        await DatabaseService().getFriendData(friendUid);
+
+                    await DatabaseService()
+                        .addFriend(friend, user.uid, widget.gid);
+
                     Navigator.pop(context);
                   } else {
                     print('enter a valid email');
@@ -67,4 +74,4 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
   }
 }
 
-_checkEmailValid(String val) {}
+// _checkEmailValid(String val) {}

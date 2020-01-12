@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/cards/group_card.dart';
 import 'package:ping_app/screens/home/settings/settings.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -37,13 +37,10 @@ class _PrimaryViewState extends State<PrimaryView> {
     return MultiProvider(
       providers: [
         StreamProvider<UserData>.value(
-          value: DatabaseService(uid: user.uid).userData,
+          value: DatabaseService().userData(user.uid),
         ),
-        StreamProvider<List<String>>.value(
-          value: DatabaseService(uid: user.uid).groupListString,
-        ),
-        StreamProvider<List<GroupCard>>.value(
-            value: DatabaseService(uid: user.uid).groupList)
+        StreamProvider<List<Group>>.value(
+            value: DatabaseService().groupList(user.uid)),
       ],
       child: Scaffold(
         backgroundColor: Colors.red[100],

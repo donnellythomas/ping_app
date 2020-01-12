@@ -1,77 +1,108 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ping_app/models/friend.dart';
+import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/cards/group_card.dart';
-import 'package:ping_app/screens/home/settings/cards/person_card.dart';
 
 class DatabaseService {
-  final String uid;
-  DatabaseService({this.uid});
   static final Firestore db = Firestore.instance;
 
+  //References for all the collections
   final CollectionReference users = db.collection('users');
   final CollectionReference emailToUid = db.collection('emailToUid');
+  final CollectionReference chats = db.collection('chats');
+
+  //Setters
   Future setUserData(
+    String uid,
     String message,
+    String name,
     String email,
-    // List<Group> groups,
   ) async {
     return await users.document(uid).setData({
       'message': message,
       'email': email,
+      'name': name,
       'uid': uid,
     });
   }
 
   Future setGoupData(
-      String groupName, List<String> people, bool switchValue) async {
-    return await users.document(uid).collection('groups').document().setData(
-        {'name': groupName, 'people': people, 'switchValue': switchValue});
+    String name,
+    String uid,
+    bool isSelected,
+  ) async {
+    DocumentReference groupDoc =
+        users.document(uid).collection('groups').document();
+    return await groupDoc.setData({
+      'gid': groupDoc.documentID,
+      'name': name,
+      'isSelected': isSelected,
+      'friends': []
+    });
   }
 
-  Future updateMessage(String message) async {
+  //Updaters
+  Future updateMessage(String message, String uid) async {
     return await users.document(uid).updateData({
       'message': message,
     });
   }
 
-  //userData from snapshot
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+  // Future removePerson(UserData person, String gid) async {
+  //   return await users
+  //       .document(uid)
+  //       .collection('groups')
+  //       .document(gid)
+  //       .updateData({
+  //     'people': FieldValue.arrayRemove([person])
+  //   });
+  // }
+
+  Future addFriend(Friend friend, String uid, String gid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .updateData({
+      'friends': FieldValue.arrayUnion([
+        {'uid': friend.uid, 'email': friend.email, 'name': friend.name}
+      ])
+    });
+  }
+
+  Future switchToggle(bool isSelected, String gid, String uid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .updateData({'isSelected': isSelected});
+  }
+
+  Future addEmailToUid(String email, String uid) async {
+    return await emailToUid.document(email).setData({'uid': uid});
+  }
+
+//GETTERS
+
+  //get userData from FireBase
+  Stream<UserData> userData(String uid) {
+    return users
+        .document(uid)
+        .snapshots()
+        .map((snapshot) => _userDataFromSnapshot(snapshot, uid));
+  }
+
+  //Map snapshot to userData
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot, String uid) {
     return UserData(
       uid: uid,
       message: snapshot.data['message'],
-      groups: snapshot.data['groups'],
+      name: snapshot.data['name'],
+      email: snapshot.data['email'],
     );
   }
 
-  //userGroups from snapshot
-
-  //get user doc stream aka get user data from firestore
-  Stream<UserData> get userData {
-    return users.document(uid).snapshots().map(_userDataFromSnapshot);
-  }
-
-  List<GroupCard> _groupListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
-      // print("document id " + doc.documentID);
-      return GroupCard(
-        gid: doc.documentID,
-        name: doc.data['name'] ?? 'default name',
-        people: List.from(doc['people']),
-        switchValue: doc.data['switchValue'],
-      );
-    }).toList();
-  }
-
-  List<String> _groupListStringFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
-      return doc.data['name'].toString();
-    }).toList();
-  }
-
-  //get list of groups from firestore
-  Stream<List<GroupCard>> get groupList {
+  Stream<List<Group>> groupList(String uid) {
     return users
         .document(uid)
         .collection('groups')
@@ -79,45 +110,26 @@ class DatabaseService {
         .map(_groupListFromSnapshot);
   }
 
-  //get list of groups from firestore
-  Stream<List<String>> get groupListString {
-    return users
-        .document(uid)
-        .collection('groups')
-        .snapshots()
-        .map(_groupListStringFromSnapshot);
+  Future<String> getUidFromEmail(String email) {
+    return emailToUid.document(email).get().then((doc) => doc.data['uid']);
   }
 
-  Future removePerson(String name, String gid) async {
-    return await users
-        .document(uid)
-        .collection('groups')
-        .document(gid)
-        .updateData({
-      'people': FieldValue.arrayRemove([name])
-    });
+  Future<Friend> getFriendData(String uid) {
+    return users.document(uid).get().then((doc) =>
+        Friend(email: doc.data['email'], name: doc.data['name'], uid: uid));
   }
 
-  Future addPerson(String name, String gid) async {
-    return await users
-        .document(uid)
-        .collection('groups')
-        .document(gid)
-        .updateData({
-      'people': FieldValue.arrayUnion([name])
-    });
-  }
-
-  Future switchToggle(bool switchValue, String gid) async {
-    return await users
-        .document(uid)
-        .collection('groups')
-        .document(gid)
-        .updateData({'switchValue': switchValue});
-  }
-
-  Future addEmailToUid(String email) async {
-    return await emailToUid.document(email).setData({'uid': uid});
+  List<Group> _groupListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents
+        .map((doc) => Group(
+            name: doc.data['name'],
+            isSelected: doc.data['isSelected'],
+            gid: doc.data['gid'],
+            friends: List.from(doc.data['friends'].map((index) => Friend(
+                email: index['email'],
+                name: index['name'],
+                uid: index['uid'])))))
+        .toList();
   }
 
   Future<bool> checkEmailExists(String email) async {
@@ -129,4 +141,6 @@ class DatabaseService {
       }
     });
   }
+
+  Future createChats(String uid) async {}
 }

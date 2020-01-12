@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ping_app/models/user.dart';
+import 'package:ping_app/models/group.dart';
 import 'package:ping_app/screens/home/settings/cards/group_card.dart';
 
 import 'package:ping_app/shared/textfield_alert_dialog_addGroup.dart';
@@ -8,9 +8,7 @@ import 'package:provider/provider.dart';
 class GroupEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
-    final List<GroupCard> groupList = Provider.of<List<GroupCard>>(context);
+    final List<Group> groupList = Provider.of<List<Group>>(context);
 
     void _showAlertDialog() {
       showDialog(
@@ -50,8 +48,6 @@ class GroupEditor extends StatelessWidget {
                 ),
                 onPressed: () async {
                   _showAlertDialog();
-                  // await DatabaseService(uid: user.uid).setGoupData(
-                  //     'default group name', ['null', null]);
                 },
               )
             ],
@@ -65,7 +61,10 @@ class GroupEditor extends StatelessWidget {
                 padding: EdgeInsets.all(0),
                 itemCount: groupList == null ? 0 : groupList.length,
                 itemBuilder: (context, index) {
-                  return groupList[index];
+                  print(groupList);
+                  return GroupCard(
+                    group: groupList[index],
+                  );
                 },
               ),
             ),

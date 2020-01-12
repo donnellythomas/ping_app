@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/cards/group_card.dart';
 import 'package:ping_app/screens/home/settings/panels/group_editor.dart';
 import 'package:ping_app/services/auth.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/constants.dart';
-import 'package:ping_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatelessWidget {
@@ -49,8 +47,8 @@ class Settings extends StatelessWidget {
                 decoration:
                     textInputDecoration.copyWith(hintText: 'Type Message here'),
                 onChanged: (val) async {
-                  await DatabaseService(uid: user.uid)
-                      .updateMessage(val ?? userData.message);
+                  await DatabaseService()
+                      .updateMessage(val ?? userData.message, user.uid);
                 },
               ),
             ),
@@ -62,8 +60,8 @@ class Settings extends StatelessWidget {
                     'MY GROUPS',
                   ),
                 )),
-            StreamProvider<List<GroupCard>>.value(
-              value: DatabaseService(uid: user.uid).groupList,
+            StreamProvider<List<Group>>.value(
+              value: DatabaseService().groupList(user.uid),
               child: GroupEditor(),
             ),
             Padding(

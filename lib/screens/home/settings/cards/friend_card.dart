@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:ping_app/models/user.dart';
-import 'package:ping_app/services/database.dart';
-import 'package:provider/provider.dart';
+import 'package:ping_app/models/friend.dart';
 
-class PersonCard extends StatelessWidget {
-  final String name;
+class FriendCard extends StatelessWidget {
+  final Friend friend;
   final String gid;
-  PersonCard({this.name, this.gid});
+  FriendCard({this.friend, this.gid});
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     return Card(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -18,7 +15,7 @@ class PersonCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
-              name,
+              friend.uid,
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -28,7 +25,7 @@ class PersonCard extends StatelessWidget {
               icon: Icon(Icons.not_interested),
               onPressed: () async {
                 print(gid);
-                await DatabaseService(uid: user.uid).removePerson(name, gid);
+                // await DatabaseService(uid: user.uid).removePerson(userData.name, gid);
               })
         ],
       ),
