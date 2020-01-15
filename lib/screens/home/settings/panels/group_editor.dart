@@ -61,7 +61,6 @@ class GroupEditor extends StatelessWidget {
                 padding: EdgeInsets.all(0),
                 itemCount: groupList == null ? 0 : groupList.length,
                 itemBuilder: (context, index) {
-                  print(groupList);
                   return GroupCard(
                     group: groupList[index],
                   );

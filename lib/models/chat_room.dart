@@ -1,8 +1,11 @@
 import 'package:ping_app/screens/home/messages.dart';
 
-class ChatRoom {
-  final List<String> users;
-  final List<Messages> messages;
+import 'friend.dart';
 
-  ChatRoom({this.users, this.messages});
+class ChatRoom {
+  final List<String> friends;
+  final List<Messages> messages;
+  final String name;
+
+  ChatRoom({this.friends, this.messages, this.name});
 }

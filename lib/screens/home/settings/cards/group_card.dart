@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/models/friend.dart';
 import 'package:ping_app/screens/home/settings/cards/friend_card.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/textfield_alert_dialog_addFriend.dart';
