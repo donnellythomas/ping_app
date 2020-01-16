@@ -104,13 +104,20 @@ class DatabaseService {
     );
   }
 
+  // Future<String> getName(String uid) {
+  //   return users.document(uid).get().then((doc) => doc.data['name']);
+  // }
+  // Future<String> getEmail(String uid) {
+  //   return users.document(uid).get().then((doc) => doc.data['email']);
+  // }
+
   Stream<List<ChatRoom>> chatList(User user) {
     // print(uid);
     return chats
         .where('users', arrayContains: {
           'uid': user.uid,
-          'email': 'test1@test.com',
-          'name': 'default name'
+          'email': 'email Here',
+          'name': 'name here '
         })
         .snapshots()
         .map(_chatRoomFromSnapshot);
@@ -138,6 +145,14 @@ class DatabaseService {
 
   Future<String> getUidFromEmail(String email) {
     return emailToUid.document(email).get().then((doc) => doc.data['uid']);
+  }
+
+  Future<UserData> getUserDataFromUid(String uid) {
+    return users.document(uid).get().then((doc) => UserData(
+        email: doc.data['email'],
+        name: doc.data['name'],
+        message: doc.data['message'],
+        uid: uid));
   }
 
   Future<Friend> getFriendData(String uid) {

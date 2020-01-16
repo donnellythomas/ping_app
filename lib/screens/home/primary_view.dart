@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/chat_room.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
 import 'package:ping_app/screens/home/settings/settings.dart';
@@ -41,6 +42,9 @@ class _PrimaryViewState extends State<PrimaryView> {
         ),
         StreamProvider<List<Group>>.value(
             value: DatabaseService().groupList(user.uid)),
+        StreamProvider<List<ChatRoom>>.value(
+          value: DatabaseService().chatList(user),
+        )
       ],
       child: Scaffold(
         backgroundColor: Colors.red[100],
