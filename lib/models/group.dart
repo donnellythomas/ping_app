@@ -1,9 +1,7 @@
-import 'friend.dart';
-
 class Group {
   final String name;
   final bool isSelected;
-  final List<Friend> friends;
+  final List<String> friendUids;
   final String gid;
-  Group({this.name, this.isSelected, this.friends, this.gid});
+  Group({this.name, this.isSelected, this.friendUids, this.gid});
 }

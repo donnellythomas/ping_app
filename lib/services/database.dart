@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ping_app/models/chat_room.dart';
-import 'package:ping_app/models/friend.dart';
+
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
 import 'package:ping_app/models/chat_room.dart';
@@ -39,7 +39,7 @@ class DatabaseService {
       'gid': groupDoc.documentID,
       'name': name,
       'isSelected': isSelected,
-      'friends': []
+      'friendUids': [uid]
     });
   }
 
@@ -60,15 +60,13 @@ class DatabaseService {
   //   });
   // }
 
-  Future addFriend(Friend friend, String uid, String gid) async {
+  Future addFriend(String friendUid, String uid, String gid) async {
     return await users
         .document(uid)
         .collection('groups')
         .document(gid)
         .updateData({
-      'friends': FieldValue.arrayUnion([
-        {'uid': friend.uid, 'email': friend.email, 'name': friend.name}
-      ])
+      'friendUids': FieldValue.arrayUnion([friendUid])
     });
   }
 
@@ -104,21 +102,25 @@ class DatabaseService {
     );
   }
 
-  // Future<String> getName(String uid) {
-  //   return users.document(uid).get().then((doc) => doc.data['name']);
-  // }
-  // Future<String> getEmail(String uid) {
-  //   return users.document(uid).get().then((doc) => doc.data['email']);
-  // }
+  Future setName(String uid, String name) {
+    return users.document(uid).updateData({'name': name});
+  }
 
-  Stream<List<ChatRoom>> chatList(User user) {
+  Future<String> getName(String uid) {
+    return users.document(uid).get().then((doc) => doc.data['name']);
+  }
+
+  Future<String> getEmail(String uid) {
+    return users.document(uid).get().then((doc) => doc.data['email']);
+  }
+
+  Stream<List<ChatRoom>> chatList(String uid) {
     // print(uid);
     return chats
-        .where('users', arrayContains: {
-          'uid': user.uid,
-          'email': 'email Here',
-          'name': 'name here '
-        })
+        .where(
+          'users',
+          arrayContains: uid,
+        )
         .snapshots()
         .map(_chatRoomFromSnapshot);
   }
@@ -128,10 +130,7 @@ class DatabaseService {
         .map((doc) => ChatRoom(
             messages: List.from(doc.data['messages']),
             name: doc.data['name'],
-            friends: List.from(doc.data['users'].map((index) => Friend(
-                email: index['email'],
-                name: index['name'],
-                uid: index['uid'])))))
+            friendUids: List.from(doc.data['users'])))
         .toList();
   }
 
@@ -155,21 +154,13 @@ class DatabaseService {
         uid: uid));
   }
 
-  Future<Friend> getFriendData(String uid) {
-    return users.document(uid).get().then((doc) =>
-        Friend(email: doc.data['email'], name: doc.data['name'], uid: uid));
-  }
-
   List<Group> _groupListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents
         .map((doc) => Group(
             name: doc.data['name'],
             isSelected: doc.data['isSelected'],
             gid: doc.data['gid'],
-            friends: List.from(doc.data['friends'].map((index) => Friend(
-                email: index['email'],
-                name: index['name'],
-                uid: index['uid'])))))
+            friendUids: List.from(doc.data['friendUids'])))
         .toList();
   }
 
@@ -196,7 +187,7 @@ class DatabaseService {
 
   Future _createChat(DocumentSnapshot doc) async {
     return await chats.document().setData({
-      'users': doc.data['friends'],
+      'users': doc.data['friendUids'],
       'messages': [],
       'name': doc.data['name']
     });

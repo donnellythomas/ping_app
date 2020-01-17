@@ -71,12 +71,12 @@ class GroupCard extends StatelessWidget {
               height: 100,
               color: Colors.grey[300],
               child: ListView.builder(
-                itemCount: group.friends.length,
+                itemCount: group.friendUids.length,
                 padding: EdgeInsets.all(0),
                 itemBuilder: (context, index) {
                   // print(group.friends.length);
                   return FriendCard(
-                    friend: group.friends[index],
+                    friendUid: group.friendUids[index],
                     gid: group.gid,
                   );
                 },

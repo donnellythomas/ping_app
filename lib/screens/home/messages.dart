@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
+import 'package:ping_app/models/message_card.dart';
 import 'package:provider/provider.dart';
 
 class Messages extends StatelessWidget {
@@ -24,21 +25,11 @@ class Messages extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
       ),
-      body: Column(
-        children: <Widget>[
-          // ListView.builder(
-          //   itemCount: chatList == null ? 0 : chatList.length,
-          //   itemBuilder: (BuildContext context, int index) {
-          //     return Text(chatList[index].name);
-          //   },
-          // ),
-          RaisedButton(
-            child: Text('clickMe'),
-            onPressed: () {
-              print(chatList.length);
-            },
-          )
-        ],
+      body: ListView.builder(
+        itemCount: chatList == null ? 0 : chatList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return MessageCard(chatList: chatList, index: index);
+        },
       ),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ping_app/models/friend.dart';
 import 'package:ping_app/models/user.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/constants.dart';
@@ -56,11 +55,9 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
                       .then((value) => value == true)) {
                     String friendUid =
                         await DatabaseService().getUidFromEmail(_currentName);
-                    Friend friend =
-                        await DatabaseService().getFriendData(friendUid);
 
                     await DatabaseService()
-                        .addFriend(friend, user.uid, widget.gid);
+                        .addFriend(friendUid, user.uid, widget.gid);
 
                     Navigator.pop(context);
                   } else {

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ping_app/services/auth.dart';
+import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/constants.dart';
 import 'package:ping_app/shared/loading.dart';
 
@@ -19,6 +21,7 @@ class _RegisterState extends State<Register> {
   // text field state
   String email = '';
   String password = '';
+  String name = '';
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,15 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration:
+                          textInputDecoration.copyWith(hintText: 'Name'),
+                      validator: (val) => val.isEmpty ? 'Enter a name' : null,
+                      onChanged: (val) {
+                        setState(() => name = val);
+                      },
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      decoration:
                           textInputDecoration.copyWith(hintText: 'Email'),
                       validator: (val) => val.isEmpty ? 'Enter an email' : null,
                       onChanged: (val) {
@@ -86,6 +98,7 @@ class _RegisterState extends State<Register> {
                             });
                             dynamic result = await _auth
                                 .registerWithEmailAndPassword(email, password);
+                            await DatabaseService().setName(result.uid, name);
                             if (result == null) {
                               setState(() {
                                 loading = false;

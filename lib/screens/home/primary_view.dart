@@ -5,6 +5,7 @@ import 'package:ping_app/models/user.dart';
 import 'package:ping_app/screens/home/settings/settings.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:provider/provider.dart';
+import '../chat.dart';
 import 'messages.dart';
 import 'home.dart';
 
@@ -21,7 +22,16 @@ class _PrimaryViewState extends State<PrimaryView> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    Messages(),
+    WidgetsApp(
+      routes: {
+        'secondScreen': (context) => SecondScreen(),
+        'messages': (context) => Messages()
+      },
+
+      initialRoute: 'messages',
+      color: Colors.amber,
+      // title: chatList[index].name,
+    ),
     Home(),
     Settings(),
   ];
@@ -43,7 +53,7 @@ class _PrimaryViewState extends State<PrimaryView> {
         StreamProvider<List<Group>>.value(
             value: DatabaseService().groupList(user.uid)),
         StreamProvider<List<ChatRoom>>.value(
-          value: DatabaseService().chatList(user),
+          value: DatabaseService().chatList(user.uid),
         )
       ],
       child: Scaffold(
