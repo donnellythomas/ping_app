@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
+import 'package:ping_app/models/message.dart';
+import 'package:ping_app/models/user.dart';
 import 'package:ping_app/screens/main/messages/chatroom/chat.dart';
+import 'package:ping_app/services/database.dart';
+import 'package:provider/provider.dart';
 
 class MessageCard extends StatelessWidget {
   final List<ChatRoom> chatList;
@@ -9,6 +13,7 @@ class MessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
     ChatRoom currentChat = chatList[index];
     return Card(
       child: ListTile(
@@ -24,14 +29,23 @@ class MessageCard extends StatelessWidget {
           subtitle: Text(currentChat.owner + ' - ' + currentChat.mainMessage),
           onTap: () => Navigator.push(
               context,
-              new MaterialPageRoute(
-                builder: (context) => ChatBoard(
-                    chatData: currentChat,
-                    title: currentChat.name,
-                    locationLink: currentChat.location,
-                    mainMessage: currentChat.mainMessage,
-                    owner: currentChat.owner,
-                    cid: currentChat.cid),
+              MaterialPageRoute(
+                builder: (context) => MultiProvider(
+                    providers: [
+                      StreamProvider<UserData>.value(
+                        value: DatabaseService().userData(user.uid),
+                      ),
+                      StreamProvider<List<Message>>.value(
+                          value: DatabaseService()
+                              .getMessageList(currentChat.cid)),
+                    ],
+                    child: ChatBoard(
+                        chatData: currentChat,
+                        title: currentChat.name,
+                        locationLink: currentChat.location,
+                        mainMessage: currentChat.mainMessage,
+                        owner: currentChat.owner,
+                        cid: currentChat.cid)),
               ))),
     );
   }

@@ -4,6 +4,7 @@ import 'package:ping_app/models/chat_room.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/message.dart';
 import 'package:ping_app/models/user.dart';
+import 'package:ping_app/screens/main/messages/messages.dart';
 
 class DatabaseService {
   static final Firestore db = Firestore.instance;
@@ -91,16 +92,6 @@ class DatabaseService {
     });
   }
 
-  Future createChats(UserData userData) async {
-    return await users
-        .document(userData.uid)
-        .collection('groups')
-        .where('isSelected', isEqualTo: true)
-        .getDocuments()
-        .then((doc) {
-      return doc.documents.forEach((doc) => _createChat(doc, userData));
-    });
-  }
   //----------------------------------------------------------------------------
 
   //GROUP-----------------------------------------------------------------------
@@ -193,6 +184,17 @@ class DatabaseService {
         .toList();
   }
 
+  Future createChats(UserData userData) async {
+    return await users
+        .document(userData.uid)
+        .collection('groups')
+        .where('isSelected', isEqualTo: true)
+        .getDocuments()
+        .then((doc) {
+      return doc.documents.forEach((doc) => _createChat(doc, userData));
+    });
+  }
+
   Future _createChat(DocumentSnapshot doc, UserData owner) async {
     DocumentReference chatRef = chats.document();
     return await chatRef.setData({
@@ -213,6 +215,16 @@ class DatabaseService {
       ])
     });
   }
+
+  Stream<List<Message>> getMessageList(String cid) {
+    return chats.document(cid).snapshots().map((snap) {
+      return List.from(snap.data['messages'].map((index) => Message(
+            author: index['author'],
+            content: index['message'],
+          )));
+    });
+  }
+
 //------------------------------------------------------------------------------
 
 }

@@ -1,5 +1,7 @@
 import 'package:ping_app/models/chat_room.dart';
 import 'package:ping_app/models/message.dart';
+import 'package:ping_app/models/user.dart';
+import 'package:ping_app/screens/main/messages/chatroom/me_bubble.dart';
 import 'package:ping_app/screens/main/messages/chatroom/someone_bubble.dart';
 
 import 'package:ping_app/services/database.dart';
@@ -24,8 +26,9 @@ class ChatBoard extends StatelessWidget {
       this.chatData});
   @override
   Widget build(BuildContext context) {
-    // List<Message> messageList = Provider.of<List<Message>>(context);
+    List<Message> messageList = Provider.of<List<Message>>(context);
     TextEditingController _controller = new TextEditingController();
+    UserData userData = Provider.of<UserData>(context);
 
     return Scaffold(
         backgroundColor: Colors.red[100],
@@ -68,11 +71,17 @@ class ChatBoard extends StatelessWidget {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                  itemCount: chatData.messages.length,
+                  itemCount: messageList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return SomeoneBubble(
-                      message: chatData.messages[index],
-                    );
+                    if (messageList[index].author == userData.name) {
+                      return MeBubble(
+                        message: messageList[index],
+                      );
+                    } else {
+                      return SomeoneBubble(
+                        message: messageList[index],
+                      );
+                    }
                   },
                 ),
               ),
@@ -88,7 +97,7 @@ class ChatBoard extends StatelessWidget {
                       onSubmitted: (val) async {
                         // print(cid);
                         await DatabaseService()
-                            .sendChatMessage(val, owner, cid);
+                            .sendChatMessage(val, userData.name, cid);
                         _controller.clear();
                       }),
                 ),
