@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     // final List<String> groupList = Provider.of<List<String>>(context);
     final User user = Provider.of<User>(context);
+    final UserData userData = Provider.of<UserData>(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +27,7 @@ class Home extends StatelessWidget {
         ),
         RawMaterialButton(
           onPressed: () {
-            DatabaseService().createChats(user.uid);
+            DatabaseService().createChats(userData);
           },
           child: Text(
             'SOS!',

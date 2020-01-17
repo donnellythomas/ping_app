@@ -4,13 +4,15 @@ class ChatRoom {
   final List<String> friendUids;
   final List<Messages> messages;
   final String name;
-  final String sender;
-  final String notificationMessage;
+  final String owner;
+  final String mainMessage;
+  final String location;
 
   ChatRoom(
       {this.friendUids,
       this.messages,
       this.name,
-      this.sender,
-      this.notificationMessage});
+      this.owner,
+      this.mainMessage,
+      this.location});
 }

@@ -9,19 +9,29 @@ class MessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChatRoom currentChat = chatList[index];
     return Card(
       child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Colors.red,
             child: Text(
-              'SOS',
+              'SOS!',
               style: TextStyle(color: Colors.white, fontFamily: 'bebas'),
             ),
           ),
           contentPadding: EdgeInsets.fromLTRB(12, 4, 12, 4),
-          title: Text(chatList[index].name),
-          subtitle: Text('Custom Message Here'),
-          onTap: () => Navigator.pushNamed(context, 'secondScreen')),
+          title: Text(currentChat.name),
+          subtitle: Text(currentChat.owner + ' - ' + currentChat.mainMessage),
+          onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => ChatBoard(
+                  title: currentChat.name,
+                  locationLink: currentChat.location,
+                  mainMessage: currentChat.mainMessage,
+                  owner: currentChat.owner,
+                ),
+              ))),
     );
   }
 }

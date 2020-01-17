@@ -130,7 +130,10 @@ class DatabaseService {
         .map((doc) => ChatRoom(
             messages: List.from(doc.data['messages']),
             name: doc.data['name'],
-            friendUids: List.from(doc.data['users'])))
+            friendUids: List.from(doc.data['users']),
+            owner: doc.data['owner'],
+            mainMessage: doc.data['mainMessage'],
+            location: doc.data['location']))
         .toList();
   }
 
@@ -174,22 +177,25 @@ class DatabaseService {
     });
   }
 
-  Future createChats(String uid) async {
+  Future createChats(UserData userData) async {
     return await users
-        .document(uid)
+        .document(userData.uid)
         .collection('groups')
         .where('isSelected', isEqualTo: true)
         .getDocuments()
         .then((doc) {
-      return doc.documents.forEach((doc) => _createChat(doc));
+      return doc.documents.forEach((doc) => _createChat(doc, userData));
     });
   }
 
-  Future _createChat(DocumentSnapshot doc) async {
+  Future _createChat(DocumentSnapshot doc, UserData owner) async {
     return await chats.document().setData({
       'users': doc.data['friendUids'],
       'messages': [],
-      'name': doc.data['name']
+      'name': doc.data['name'],
+      'owner': owner.name,
+      'mainMessage': owner.message,
+      'location': 'LocationLink',
     });
   }
 }
