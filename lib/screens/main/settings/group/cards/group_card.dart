@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/cards/friend_card.dart';
+import 'package:ping_app/screens/main/settings/group/alerts/textfield_alert_dialog_addFriend.dart';
+import 'package:ping_app/screens/main/settings/group/cards/friend_card.dart';
 import 'package:ping_app/services/database.dart';
-import 'package:ping_app/shared/textfield_alert_dialog_addFriend.dart';
 import 'package:provider/provider.dart';
 
 class GroupCard extends StatelessWidget {

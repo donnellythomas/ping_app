@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/settings.dart';
+import 'package:ping_app/screens/main/home/home.dart';
+import 'package:ping_app/screens/main/messages/messages.dart';
+import 'package:ping_app/screens/main/settings/settings.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:provider/provider.dart';
-
-import 'messages.dart';
-import 'home.dart';
 
 class PrimaryView extends StatefulWidget {
   PrimaryView({Key key}) : super(key: key);

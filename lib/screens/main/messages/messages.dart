@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
-import 'package:ping_app/models/message_card.dart';
+import 'package:ping_app/screens/main/messages/message_card.dart';
 import 'package:provider/provider.dart';
 
 class Messages extends StatelessWidget {

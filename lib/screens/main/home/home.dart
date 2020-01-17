@@ -10,8 +10,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final List<String> groupList = Provider.of<List<String>>(context);
-    final User user = Provider.of<User>(context);
     final UserData userData = Provider.of<UserData>(context);
 
     return Column(

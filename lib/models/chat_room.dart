@@ -1,15 +1,17 @@
-import 'package:ping_app/screens/home/messages.dart';
+import 'package:ping_app/models/message.dart';
 
 class ChatRoom {
+  final String cid;
   final List<String> friendUids;
-  final List<Messages> messages;
+  final List<Message> messages;
   final String name;
   final String owner;
   final String mainMessage;
   final String location;
 
   ChatRoom(
-      {this.friendUids,
+      {this.cid,
+      this.friendUids,
       this.messages,
       this.name,
       this.owner,

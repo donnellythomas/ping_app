@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/home/settings/panels/group_editor.dart';
+import 'package:ping_app/screens/main/settings/group/group_editor.dart';
 import 'package:ping_app/services/auth.dart';
 import 'package:ping_app/services/database.dart';
 import 'package:ping_app/shared/constants.dart';

@@ -1,16 +1,32 @@
-import 'package:ping_app/shared/someone_bubble.dart';
+import 'package:ping_app/models/chat_room.dart';
+import 'package:ping_app/models/message.dart';
+import 'package:ping_app/screens/main/messages/chatroom/someone_bubble.dart';
+
+import 'package:ping_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:ping_app/shared/constants.dart';
+import 'package:provider/provider.dart';
 
 class ChatBoard extends StatelessWidget {
   final String title;
   final String owner;
   final String locationLink;
   final String mainMessage;
+  final String cid;
+  final ChatRoom chatData;
 
-  ChatBoard({this.title, this.locationLink, this.mainMessage, this.owner});
+  ChatBoard(
+      {this.title,
+      this.locationLink,
+      this.mainMessage,
+      this.owner,
+      this.cid,
+      this.chatData});
   @override
   Widget build(BuildContext context) {
+    // List<Message> messageList = Provider.of<List<Message>>(context);
+    TextEditingController _controller = new TextEditingController();
+
     return Scaffold(
         backgroundColor: Colors.red[100],
         appBar: AppBar(
@@ -52,16 +68,42 @@ class ChatBoard extends StatelessWidget {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                  itemCount: 10,
+                  itemCount: chatData.messages.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return SomeoneBubble();
+                    return SomeoneBubble(
+                      message: chatData.messages[index],
+                    );
                   },
                 ),
               ),
             ),
-            TextField(
-              decoration:
-                  textInputDecoration.copyWith(hintText: 'Type Message Here'),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: TextField(
+                      decoration: textInputDecoration.copyWith(
+                          hintText: 'Type Message Here'),
+                      controller: _controller,
+                      onSubmitted: (val) async {
+                        // print(cid);
+                        await DatabaseService()
+                            .sendChatMessage(val, owner, cid);
+                        _controller.clear();
+                      }),
+                ),
+                // Expanded(
+                //   flex: 1,
+                //   child: Container(
+                //     height: 60,
+                //     child: FlatButton(
+                //       color: Colors.white,
+                //       child: Text('Send'),
+                //       onPressed: () {},
+                //     ),
+                //   ),
+                // )
+              ],
             )
           ],
         ));

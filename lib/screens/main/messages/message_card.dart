@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
-import 'package:ping_app/screens/chat.dart';
+import 'package:ping_app/screens/main/messages/chatroom/chat.dart';
 
 class MessageCard extends StatelessWidget {
   final List<ChatRoom> chatList;
@@ -26,11 +26,12 @@ class MessageCard extends StatelessWidget {
               context,
               new MaterialPageRoute(
                 builder: (context) => ChatBoard(
-                  title: currentChat.name,
-                  locationLink: currentChat.location,
-                  mainMessage: currentChat.mainMessage,
-                  owner: currentChat.owner,
-                ),
+                    chatData: currentChat,
+                    title: currentChat.name,
+                    locationLink: currentChat.location,
+                    mainMessage: currentChat.mainMessage,
+                    owner: currentChat.owner,
+                    cid: currentChat.cid),
               ))),
     );
   }

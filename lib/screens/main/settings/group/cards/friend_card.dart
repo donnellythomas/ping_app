@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ping_app/services/database.dart';
-import 'package:ping_app/shared/loading.dart';
 
 class FriendCard extends StatelessWidget {
   final String friendUid;
