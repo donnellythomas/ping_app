@@ -25,8 +25,8 @@ class GroupEditor extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.all(12),
-      height: 400,
-      color: Colors.white,
+      height: 350,
+      color: Colors.red[100],
       child: Column(
         children: <Widget>[
           Row(
@@ -57,7 +57,7 @@ class GroupEditor extends StatelessWidget {
             child: Container(
               // height: 200.0,
               margin: EdgeInsets.all(0),
-              color: Colors.grey[100],
+              color: Colors.red[100],
               child: new ListView.builder(
                 padding: EdgeInsets.all(0),
                 itemCount: groupList == null ? 0 : groupList.length,

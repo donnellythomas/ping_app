@@ -110,6 +110,14 @@ class DatabaseService {
     });
   }
 
+  Future removeGroup(String uid, String gid) async {
+    return await users
+        .document(uid)
+        .collection('groups')
+        .document(gid)
+        .delete();
+  }
+
   Future removeFriend(String friendUid, String uid, String gid) async {
     return await users
         .document(uid)
@@ -184,18 +192,20 @@ class DatabaseService {
         .toList();
   }
 
-  Future createChats(UserData userData) async {
+  Future createChats(UserData userData, String location) async {
     return await users
         .document(userData.uid)
         .collection('groups')
         .where('isSelected', isEqualTo: true)
         .getDocuments()
         .then((doc) {
-      return doc.documents.forEach((doc) => _createChat(doc, userData));
+      return doc.documents
+          .forEach((doc) => _createChat(doc, userData, location));
     });
   }
 
-  Future _createChat(DocumentSnapshot doc, UserData owner) async {
+  Future _createChat(
+      DocumentSnapshot doc, UserData owner, String location) async {
     DocumentReference chatRef = chats.document();
     return await chatRef.setData({
       'cid': chatRef.documentID,
@@ -204,7 +214,7 @@ class DatabaseService {
       'name': doc.data['name'],
       'owner': owner.name,
       'mainMessage': owner.message,
-      'location': 'LocationLink',
+      'location': location,
     });
   }
 

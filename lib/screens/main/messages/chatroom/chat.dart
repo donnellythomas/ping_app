@@ -8,18 +8,19 @@ import 'package:ping_app/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:ping_app/shared/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatBoard extends StatelessWidget {
   final String title;
   final String owner;
-  final String locationLink;
+  final String location;
   final String mainMessage;
   final String cid;
   final ChatRoom chatData;
 
   ChatBoard(
       {this.title,
-      this.locationLink,
+      this.location,
       this.mainMessage,
       this.owner,
       this.cid,
@@ -64,8 +65,14 @@ class ChatBoard extends StatelessWidget {
                         fontWeight: FontWeight.bold)),
                 subtitle: Text(mainMessage,
                     style: TextStyle(color: Colors.deepPurple, fontSize: 18)),
-                trailing: Text('Link To Location',
-                    style: TextStyle(color: Colors.deepPurple, fontSize: 18)),
+                trailing: RaisedButton(
+                  child: Text('Link To Location',
+                      style: TextStyle(color: Colors.deepPurple, fontSize: 18)),
+                  onPressed: () async {
+                    launch(
+                        'https://www.google.com/maps/search/?api=1&query=$location');
+                  },
+                ),
               ),
             ),
             Expanded(

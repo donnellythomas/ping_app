@@ -34,13 +34,17 @@ class Settings extends StatelessWidget {
             Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 16, 8, 0),
                   child: Text(
-                    'SOS MESSAGE',
+                    'SOS Message',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 )),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
               child: TextFormField(
                 initialValue:
                     userData == null ? 'default message' : userData.message,
@@ -52,14 +56,6 @@ class Settings extends StatelessWidget {
                 },
               ),
             ),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: Text(
-                    'MY GROUPS',
-                  ),
-                )),
             StreamProvider<List<Group>>.value(
               value: DatabaseService().groupList(user.uid),
               child: GroupEditor(),

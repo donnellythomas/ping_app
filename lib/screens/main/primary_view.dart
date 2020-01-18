@@ -55,25 +55,26 @@ class _PrimaryViewState extends State<PrimaryView> {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           backgroundColor: Colors.amber[700],
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.message,
-                color: Colors.deepPurple,
-                size: 50,
+              icon: Image.asset(
+                'assets/personIcon.png',
+                height: 50,
               ),
               title: Text('Messages'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: Colors.deepPurple,
-                size: 50,
+              icon: Image.asset(
+                'assets/homeIcon.png',
+                height: 50,
               ),
               title: Text('Home'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings, color: Colors.deepPurple, size: 50),
+              icon: Image.asset(
+                'assets/settingsIcon.png',
+                height: 50,
+              ),
               title: Text('Settings'),
             ),
           ],

@@ -25,11 +25,14 @@ class Messages extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: chatList == null ? 0 : chatList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return MessageCard(chatList: chatList, index: index);
-        },
+      body: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: ListView.builder(
+          itemCount: chatList == null ? 0 : chatList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return MessageCard(chatList: chatList, index: index);
+          },
+        ),
       ),
     );
   }

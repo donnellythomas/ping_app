@@ -17,6 +17,10 @@ class MessageCard extends StatelessWidget {
     ChatRoom currentChat = chatList[index];
     return Card(
       child: ListTile(
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {},
+          ),
           leading: CircleAvatar(
             backgroundColor: Colors.red,
             child: Text(
@@ -42,7 +46,7 @@ class MessageCard extends StatelessWidget {
                     child: ChatBoard(
                         chatData: currentChat,
                         title: currentChat.name,
-                        locationLink: currentChat.location,
+                        location: currentChat.location,
                         mainMessage: currentChat.mainMessage,
                         owner: currentChat.owner,
                         cid: currentChat.cid)),

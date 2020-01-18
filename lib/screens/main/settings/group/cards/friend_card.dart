@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ping_app/models/user.dart';
 import 'package:ping_app/services/database.dart';
+import 'package:provider/provider.dart';
 
 class FriendCard extends StatelessWidget {
   final String friendUid;
@@ -8,6 +10,7 @@ class FriendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
     return FutureBuilder(
         future: DatabaseService().getName(friendUid),
         builder: (context, snapshot) {
@@ -43,8 +46,9 @@ class FriendCard extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.not_interested),
                       onPressed: () async {
-                        print(gid);
-                        // await DatabaseService(uid: user.uid).removePerson(userData.name, gid);
+                        // print(gid);
+                        await DatabaseService()
+                            .removeFriend(friendUid, user.uid, gid);
                       })
                 ],
               ),

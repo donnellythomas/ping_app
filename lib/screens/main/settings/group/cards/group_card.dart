@@ -27,61 +27,73 @@ class GroupCard extends StatelessWidget {
     }
 
     // print("card ID " + gid);
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Switch(
-                      value: group.isSelected,
-                      onChanged: (value) async {
-                        return await DatabaseService()
-                            .switchToggle(value, group.gid, user.uid);
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 8, 8.0),
-                      child: Text(
-                        group.name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Switch(
+                        value: group.isSelected,
+                        onChanged: (value) async {
+                          return await DatabaseService()
+                              .switchToggle(value, group.gid, user.uid);
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 8, 8.0),
+                        child: Text(
+                          group.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              FlatButton.icon(
-                icon: Icon(Icons.add),
-                label: Text(
-                  'Add Friend',
-                ),
+                FlatButton.icon(
+                  icon: Icon(Icons.add),
+                  label: Text(
+                    'Add Friend',
+                  ),
+                  onPressed: () {
+                    _showAlertDialog();
+                  },
+                )
+              ],
+            ),
+            Container(
+                height: 100,
+                color: Colors.grey[300],
+                child: ListView.builder(
+                  itemCount: group.friendUids.length,
+                  padding: EdgeInsets.all(0),
+                  itemBuilder: (context, index) {
+                    // print(group.friends.length);
+                    return FriendCard(
+                      friendUid: group.friendUids[index],
+                      gid: group.gid,
+                    );
+                  },
+                )),
+            Container(
+              child: FlatButton.icon(
+                icon: Icon(Icons.delete),
+                label: Text('Delete Group'),
                 onPressed: () {
-                  _showAlertDialog();
+                  return DatabaseService().removeGroup(user.uid, group.gid);
                 },
-              )
-            ],
-          ),
-          Container(
-              height: 100,
-              color: Colors.grey[300],
-              child: ListView.builder(
-                itemCount: group.friendUids.length,
-                padding: EdgeInsets.all(0),
-                itemBuilder: (context, index) {
-                  // print(group.friends.length);
-                  return FriendCard(
-                    friendUid: group.friendUids[index],
-                    gid: group.gid,
-                  );
-                },
-              ))
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
