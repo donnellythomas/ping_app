@@ -97,11 +97,14 @@ class _RegisterState extends State<Register> {
                             });
                             dynamic result = await _auth
                                 .registerWithEmailAndPassword(email, password);
-                            await DatabaseService().setName(result.uid, name);
+                            if (result != null) {
+                              await DatabaseService().setName(result.uid, name);
+                            }
                             if (result == null) {
                               setState(() {
                                 loading = false;
-                                error = 'Please supply a valid email';
+                                error =
+                                    'Error logging in: Please make sure email is valid';
                               });
                             }
                           }

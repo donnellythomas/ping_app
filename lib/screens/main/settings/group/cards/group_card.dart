@@ -39,6 +39,7 @@ class GroupCard extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Switch(
+                        activeColor: Colors.deepPurple,
                         value: group.isSelected,
                         onChanged: (value) async {
                           return await DatabaseService()
@@ -50,18 +51,22 @@ class GroupCard extends StatelessWidget {
                         child: Text(
                           group.name,
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple),
                         ),
                       ),
                     ],
                   ),
                 ),
                 FlatButton.icon(
-                  icon: Icon(Icons.add),
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.deepPurple,
+                  ),
                   label: Text(
                     'Add Friend',
+                    style: TextStyle(color: Colors.deepPurple),
                   ),
                   onPressed: () {
                     _showAlertDialog();
@@ -71,7 +76,7 @@ class GroupCard extends StatelessWidget {
             ),
             Container(
                 height: 100,
-                color: Colors.grey[300],
+                color: Colors.deepPurple[50],
                 child: ListView.builder(
                   itemCount: group.friendUids.length,
                   padding: EdgeInsets.all(0),
@@ -85,8 +90,11 @@ class GroupCard extends StatelessWidget {
                 )),
             Container(
               child: FlatButton.icon(
-                icon: Icon(Icons.delete),
-                label: Text('Delete Group'),
+                icon: Icon(Icons.delete, color: Colors.deepPurple),
+                label: Text(
+                  'Delete Group',
+                  style: TextStyle(color: Colors.deepPurple),
+                ),
                 onPressed: () {
                   return DatabaseService().removeGroup(user.uid, group.gid);
                 },

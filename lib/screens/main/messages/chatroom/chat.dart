@@ -78,7 +78,7 @@ class ChatBoard extends StatelessWidget {
             Expanded(
               child: Container(
                 child: ListView.builder(
-                  itemCount: messageList.length,
+                  itemCount: messageList == null ? 0 : messageList.length,
                   itemBuilder: (BuildContext context, int index) {
                     if (messageList[index].author == userData.name) {
                       return MeBubble(
@@ -103,8 +103,10 @@ class ChatBoard extends StatelessWidget {
                       controller: _controller,
                       onSubmitted: (val) async {
                         // print(cid);
-                        await DatabaseService()
-                            .sendChatMessage(val, userData.name, cid);
+                        val.isEmpty
+                            ? null
+                            : DatabaseService()
+                                .sendChatMessage(val, userData.name, cid);
                         _controller.clear();
                       }),
                 ),

@@ -38,9 +38,9 @@ class Settings extends StatelessWidget {
                   child: Text(
                     'SOS Message',
                     style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple),
                   ),
                 )),
             Padding(

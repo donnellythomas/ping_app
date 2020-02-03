@@ -16,7 +16,7 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
   TextEditingController _textFieldController = TextEditingController();
   String _currentName;
   final _formKey = GlobalKey<FormState>();
-
+  String error = '';
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -25,19 +25,38 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
         stream: null,
         builder: (context, snapshot) {
           return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(24, 24, 24, 0),
             backgroundColor: Colors.grey[200],
             title: Text('Enter a friends email'),
-            content: Form(
-              key: _formKey,
-              child: TextFormField(
-                controller: _textFieldController,
-                decoration:
-                    textInputDecoration.copyWith(hintText: 'type email here'),
-                validator: (val) {
-                  return val.isEmpty ? 'Please enter a name' : null;
-                },
-                onChanged: (val) => setState(() => _currentName = val),
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _textFieldController,
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'type email here'),
+                    validator: (val) {
+                      return val.isEmpty ? 'Please enter a name' : null;
+                    },
+                    onChanged: (val) => setState(() => _currentName = val),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 10,
+                    left: 5,
+                  ),
+                  child: Text(
+                    error,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
             actions: <Widget>[
               FlatButton(
@@ -61,7 +80,9 @@ class _TextFieldAlertDialogState extends State<TextFieldAlertDialog> {
 
                     Navigator.pop(context);
                   } else {
-                    print('enter a valid email');
+                    setState(() {
+                      error = 'Please enter a registered user';
+                    });
                   }
                 },
               )

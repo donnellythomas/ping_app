@@ -37,15 +37,19 @@ class GroupEditor extends StatelessWidget {
                 child: Text(
                   'My Groups',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple),
                 ),
               ),
               FlatButton.icon(
-                icon: Icon(Icons.add),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.deepPurple,
+                ),
                 label: Text(
                   'Add Group',
+                  style: TextStyle(color: Colors.deepPurple),
                 ),
                 onPressed: () async {
                   _showAlertDialog();

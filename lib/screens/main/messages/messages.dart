@@ -11,6 +11,19 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ChatRoom> chatList = Provider.of<List<ChatRoom>>(context);
+    Widget child;
+    if (chatList == null || chatList.length == 0) {
+      child = Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Text(
+          'No one has pinged you yet.',
+          style: TextStyle(
+            color: Colors.deepPurple,
+            fontSize: 24,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.red[100],
       appBar: AppBar(
@@ -25,14 +38,22 @@ class Messages extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 4),
-        child: ListView.builder(
-          itemCount: chatList == null ? 0 : chatList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return MessageCard(chatList: chatList, index: index);
-          },
-        ),
+      body: Column(
+        children: <Widget>[
+          Container(child: child),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Container(
+              height: 100,
+              child: ListView.builder(
+                itemCount: chatList == null ? 0 : chatList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return MessageCard(chatList: chatList, index: index);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

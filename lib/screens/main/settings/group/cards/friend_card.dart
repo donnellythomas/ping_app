@@ -38,13 +38,14 @@ class FriendCard extends StatelessWidget {
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       snapshot.data,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.deepPurple),
                     ),
                   ),
                   IconButton(
-                      icon: Icon(Icons.not_interested),
+                      icon: Icon(
+                        Icons.not_interested,
+                        color: Colors.deepPurple,
+                      ),
                       onPressed: () async {
                         // print(gid);
                         await DatabaseService()
