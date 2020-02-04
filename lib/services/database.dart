@@ -4,7 +4,6 @@ import 'package:ping_app/models/chat_room.dart';
 import 'package:ping_app/models/group.dart';
 import 'package:ping_app/models/message.dart';
 import 'package:ping_app/models/user.dart';
-import 'package:ping_app/screens/main/messages/messages.dart';
 
 class DatabaseService {
   static final Firestore db = Firestore.instance;
@@ -27,6 +26,7 @@ class DatabaseService {
       'email': email,
       'name': name,
       'uid': uid,
+      'deletedChats': []
     });
   }
 
@@ -41,11 +41,11 @@ class DatabaseService {
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot, String uid) {
     return UserData(
-      uid: uid,
-      message: snapshot.data['message'],
-      name: snapshot.data['name'],
-      email: snapshot.data['email'],
-    );
+        uid: uid,
+        message: snapshot.data['message'],
+        name: snapshot.data['name'],
+        email: snapshot.data['email'],
+        deletedChats: List.from(snapshot.data['deletedChats']));
   }
 
   Future updateMessage(String message, String uid) async {
@@ -79,7 +79,8 @@ class DatabaseService {
         email: doc.data['email'],
         name: doc.data['name'],
         message: doc.data['message'],
-        uid: uid));
+        uid: uid,
+        deletedChats: List.from(doc.data['deletedChats'])));
   }
 
   Future<bool> checkEmailExists(String email) async {
@@ -89,6 +90,12 @@ class DatabaseService {
       } else {
         return false;
       }
+    });
+  }
+
+  Future addToRemovedChats(String cid, String uid) async {
+    return await users.document(uid).updateData({
+      'deletedChats': FieldValue.arrayUnion([cid])
     });
   }
 

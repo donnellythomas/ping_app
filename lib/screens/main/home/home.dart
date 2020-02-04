@@ -5,7 +5,6 @@ import 'package:ping_app/services/database.dart';
 import 'package:ping_app/services/geolocate.dart';
 import 'package:ping_app/shared/constants.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
 
 class Home extends StatelessWidget {
   const Home({

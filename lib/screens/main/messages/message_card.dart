@@ -19,7 +19,9 @@ class MessageCard extends StatelessWidget {
       child: ListTile(
           trailing: IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              DatabaseService().addToRemovedChats(currentChat.cid, user.uid);
+            },
           ),
           leading: CircleAvatar(
             backgroundColor: Colors.red,

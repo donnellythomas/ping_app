@@ -103,10 +103,10 @@ class ChatBoard extends StatelessWidget {
                       controller: _controller,
                       onSubmitted: (val) async {
                         // print(cid);
-                        val.isEmpty
-                            ? null
-                            : DatabaseService()
-                                .sendChatMessage(val, userData.name, cid);
+                        if (val.isNotEmpty) {
+                          DatabaseService()
+                              .sendChatMessage(val, userData.name, cid);
+                        }
                         _controller.clear();
                       }),
                 ),

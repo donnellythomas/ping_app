@@ -11,10 +11,7 @@ class UserData {
   final String name;
   final String message;
   final String email;
-  UserData({
-    this.uid,
-    this.email,
-    this.name,
-    this.message,
-  });
+  final List<String> deletedChats;
+
+  UserData({this.uid, this.email, this.name, this.message, this.deletedChats});
 }
