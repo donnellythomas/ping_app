@@ -12,7 +12,7 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<ChatRoom> chatList = Provider.of<List<ChatRoom>>(context);
-
+    chatList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     UserData userData = Provider.of<UserData>(context);
 
     Widget child;

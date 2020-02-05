@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
 
 import 'package:ping_app/models/group.dart';
@@ -195,11 +196,13 @@ class DatabaseService {
             owner: doc.data['owner'],
             mainMessage: doc.data['mainMessage'],
             location: doc.data['location'],
-            cid: doc.data['cid']))
+            cid: doc.data['cid'],
+            timestamp: DateTime.parse(doc.data['timestamp'])))
         .toList();
   }
 
-  Future createChats(UserData userData, String location) async {
+  Future createChats(
+      UserData userData, String location, DateTime timestamp) async {
     return await users
         .document(userData.uid)
         .collection('groups')
@@ -207,12 +210,12 @@ class DatabaseService {
         .getDocuments()
         .then((doc) {
       return doc.documents
-          .forEach((doc) => _createChat(doc, userData, location));
+          .forEach((doc) => _createChat(doc, userData, location, timestamp));
     });
   }
 
-  Future _createChat(
-      DocumentSnapshot doc, UserData owner, String location) async {
+  Future _createChat(DocumentSnapshot doc, UserData owner, String location,
+      DateTime timestamp) async {
     DocumentReference chatRef = chats.document();
     return await chatRef.setData({
       'cid': chatRef.documentID,
@@ -222,10 +225,18 @@ class DatabaseService {
       'owner': owner.name,
       'mainMessage': owner.message,
       'location': location,
+      'timestamp': timestamp.toIso8601String(),
     });
   }
 
+  Future updateTime(String cid) async {
+    return await chats
+        .document(cid)
+        .updateData({'timestamp': DateTime.now().toIso8601String()});
+  }
+
   Future sendChatMessage(String message, String author, String cid) async {
+    updateTime(cid);
     return await chats.document(cid).updateData({
       'messages': FieldValue.arrayUnion([
         {'author': author, 'message': message}

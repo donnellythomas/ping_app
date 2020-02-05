@@ -49,7 +49,8 @@ class Home extends StatelessWidget {
             onPressed: () async {
               Position coords = await Geolocate().getCurrentLocation();
               String location = '${coords.latitude},${coords.longitude}';
-              await DatabaseService().createChats(userData, location);
+              await DatabaseService()
+                  .createChats(userData, location, DateTime.now());
             },
             child: Text(
               'SOS!',

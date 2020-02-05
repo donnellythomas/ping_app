@@ -8,6 +8,7 @@ class ChatRoom {
   final String owner;
   final String mainMessage;
   final String location;
+  final DateTime timestamp;
 
   ChatRoom(
       {this.cid,
@@ -16,5 +17,6 @@ class ChatRoom {
       this.name,
       this.owner,
       this.mainMessage,
-      this.location});
+      this.location,
+      this.timestamp});
 }
