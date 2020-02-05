@@ -15,19 +15,19 @@ class Messages extends StatelessWidget {
     chatList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
     UserData userData = Provider.of<UserData>(context);
 
-    Widget child;
-    if (chatList == null || chatList.length == 0) {
-      child = Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Text(
-          'No one has pinged you yet.',
-          style: TextStyle(
-            color: Colors.deepPurple,
-            fontSize: 24,
-          ),
-        ),
-      );
-    }
+    // Widget child;
+    // if (chatList == null || chatList.length == 0) {
+    //   child = Padding(
+    //     padding: const EdgeInsets.only(top: 20.0),
+    //     child: Text(
+    //       'No one has pinged you yet.',
+    //       style: TextStyle(
+    //         color: Colors.deepPurple,
+    //         fontSize: 24,
+    //       ),
+    //     ),
+    //   );
+    // }
     return Scaffold(
       backgroundColor: Colors.red[100],
       appBar: AppBar(

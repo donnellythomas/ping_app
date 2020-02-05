@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:ping_app/models/chat_room.dart';
 
 import 'package:ping_app/models/group.dart';
@@ -239,7 +238,11 @@ class DatabaseService {
     updateTime(cid);
     return await chats.document(cid).updateData({
       'messages': FieldValue.arrayUnion([
-        {'author': author, 'message': message}
+        {
+          'author': author,
+          'message': message,
+          'timestamp': DateTime.now().toIso8601String()
+        }
       ])
     });
   }
@@ -247,9 +250,9 @@ class DatabaseService {
   Stream<List<Message>> getMessageList(String cid) {
     return chats.document(cid).snapshots().map((snap) {
       return List.from(snap.data['messages'].map((index) => Message(
-            author: index['author'],
-            content: index['message'],
-          )));
+          author: index['author'],
+          content: index['message'],
+          timestamp: DateTime.parse(index['timestamp']))));
     });
   }
 
