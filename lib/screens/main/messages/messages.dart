@@ -36,7 +36,7 @@ class Messages extends StatelessWidget {
           style: TextStyle(
             fontSize: 35,
             color: Colors.deepPurple,
-            fontFamily: 'futura',
+            fontFamily: 'lobster',
           ),
         ),
         elevation: 0,

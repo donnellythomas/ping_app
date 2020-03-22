@@ -76,7 +76,7 @@ flutter:
         - asset: fonts/Bebas-Regular.ttf
     - family: futura
       fonts:
-        - asset: fonts/Futura Medium.ttf
+        - asset: fonts/Futura-Medium.ttf
         
   # fonts:
   #   - family: Schyler

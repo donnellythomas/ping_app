@@ -23,7 +23,7 @@ class Settings extends StatelessWidget {
             style: TextStyle(
               fontSize: 35,
               color: Colors.deepPurple,
-              fontFamily: 'futura',
+              fontFamily: 'lobster',
             ),
           ),
           elevation: 0,
@@ -40,7 +40,7 @@ class Settings extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.deepPurple),
+                        color: Colors.deepPurple,)
                   ),
                 )),
             Padding(
